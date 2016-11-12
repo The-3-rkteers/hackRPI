@@ -44,14 +44,14 @@ sample_json2=[{"filePath": '/Users/arnoldas/Desktop/Fall 2016/hackRPI/sourcefold
 '''
 
 # dictionaries are unhashable, let's convert to strings for sorting
-sorted_1 = sorted([repr(x) for x in sample_json1])
-sorted_2 = sorted([repr(x) for x in sample_json2])
+sorted_1 = sorted([repr(x) for x in parsedDataSource])
+sorted_2 = sorted([repr(x) for x in parsedDataTarget])
 print(sorted_1 == sorted_2)
 
 # in case the dictionaries are all unique or you don't care about duplicities,
 # sets should be faster than sorting
-set_1 = set(repr(x) for x in sample_json1)
-set_2 = set(repr(x) for x in sample_json2)
+set_1 = set(repr(x) for x in parsedDataSource)
+set_2 = set(repr(x) for x in parsedDataTarget)
 if set_1 == set_2:
     print "\neverything is safe and no changes found\n"
 
