@@ -12,6 +12,26 @@ targetfolder = '/Users/arnoldas/Desktop/Fall 2016/hackRPI/targetfolder/'
 targetfile = '/Users/arnoldas/Desktop/Fall 2016/hackRPI/sourcefolder/'
 outputfilenameprefix = 'test1'
 
+
+import os
+import glob
+
+contentSource = []
+contentTarget = []
+#json_dir_name = "/path/to/json/dir"
+
+json_pattern = os.path.join(sourcefolder,'*.json')
+file_list = glob.glob(json_pattern)
+for file in file_list:
+  contentSource.append(read(file))
+
+json_pattern = os.path.join(sourcefolder,'*.json')
+file_list = glob.glob(json_pattern)
+for file in file_list:
+  contentTarget.append(read(file))
+
+
+'''
 #reading all files into memory for source files
 rawDataSource = sourcefolder.read()
 changedDataSource = rawDataSource.replace('][', ']<SPLIT>[')
@@ -32,6 +52,7 @@ splitDataTarget = changedDataTarget.split('<SPLIT>')
 
 #load each string individually for target files
 parsedDataTarget = [json.loads(bit_of_data) for bit_of_data in splitDataTarget]
+'''
 
 '''
 #test data
@@ -44,14 +65,14 @@ sample_json2=[{"filePath": '/Users/arnoldas/Desktop/Fall 2016/hackRPI/sourcefold
 '''
 
 # dictionaries are unhashable, let's convert to strings for sorting
-sorted_1 = sorted([repr(x) for x in parsedDataSource])
-sorted_2 = sorted([repr(x) for x in parsedDataTarget])
+sorted_1 = sorted([repr(x) for x in contentSource])
+sorted_2 = sorted([repr(x) for x in contentSource])
 print(sorted_1 == sorted_2)
 
 # in case the dictionaries are all unique or you don't care about duplicities,
 # sets should be faster than sorting
-set_1 = set(repr(x) for x in parsedDataSource)
-set_2 = set(repr(x) for x in parsedDataTarget)
+set_1 = set(repr(x) for x in contentTarget)
+set_2 = set(repr(x) for x in contentTarget)
 if set_1 == set_2:
     print "\neverything is safe and no changes found\n"
 
