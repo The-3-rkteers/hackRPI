@@ -7,9 +7,9 @@
 
 import json
 
-sourcefolder = '/Users/arnoldas/Desktop/Fall 2016/hackRPI/sourcefolder/'
-targetfolder = '/Users/arnoldas/Desktop/Fall 2016/hackRPI/targetfolder/'
-targetfile = '/Users/arnoldas/Desktop/Fall 2016/hackRPI/sourcefolder/'
+sourcefolder = './sourcefolder/'
+targetfolder = './targetfolder/'
+targetfile = './sourcefolder/'
 outputfilenameprefix = 'test1'
 
 
@@ -32,7 +32,7 @@ for js in json_filesSource:
     with open(os.path.join(sourcefolder, js)) as json_file:
         contentSource.append(json.load(json_file))
         #print json.load(json_file)
-        print contentSource
+        #print contentSource
 
 #for filesystem after changes are made
 json_filesTarget = [pos_json for pos_json in os.listdir(targetfolder) if pos_json.endswith('.json')]
@@ -42,7 +42,7 @@ for js in json_filesTarget:
     with open(os.path.join(targetfolder, js)) as json_file:
         contentTarget.append(json.load(json_file))
         #print json.load(json_file)
-        print contentTarget
+        #print contentTarget
 
 '''
 json_pattern = os.path.join(sourcefolder,'*.json')
@@ -92,13 +92,51 @@ sample_json2=[{"filePath": '/Users/arnoldas/Desktop/Fall 2016/hackRPI/sourcefold
 '''
 
 # dictionaries are unhashable, let's convert to strings for sorting
-sorted_1 = sorted([repr(x) for x in contentSource])
-sorted_2 = sorted([repr(x) for x in contentSource])
-print(sorted_1 == sorted_2)
+sorted_1 = sorted([x for x in contentSource])
+sorted_2 = sorted([x for x in contentTarget])
 
-print "printing sorted_1 : from contentsource: ", sorted_1
-print "printing sorted_2 : from contenttarget: ", sorted_2
+'''
+#UNCOMMENT THIS IF YOU WANT TO TEST THE CHANGE DETECTION ALGORITHM
+sorted_1[0][0]["FullPath"] = "e0w"
+sorted_1[0][1]["PermissionNumber"] = 150
 
+print sorted_1[0][0], sorted_2[0][0], (sorted_1[0][0] == sorted_2[0][0]), "\n\n"
+'''
+
+'''
+print "\n\nprinting sorted_1 : from contentsource:\n\n\n"
+
+for x in sorted_1[0]:
+    print x
+
+print "\n\nprinting sorted_2 : from contenttarget:\n\n\n"
+
+for x in sorted_2[0]:
+    print x
+'''
+
+'''
+for x in range(0,len(sorted_1[0])-1):
+    print x, " ", sorted_1[0][x]
+    if sorted_1[0][x] in sorted_2[0]:
+        sorted_2[0].remove(sorted_1[0][x])
+        print sorted_2[0]
+'''
+# changes in 2 that are missing from 1
+sorted_3 = [x for x in sorted_2[0] if x not in sorted_1[0]]
+
+# stuff from 1 that's changed or missing from 2
+sorted_4 = [x for x in sorted_1[0] if x not in sorted_2[0]]
+
+print sorted_3, "\n"
+print sorted_4, "\n"
+
+# TODO: With the above two arrays, generate a changelog
+
+if (sorted_3 == []) and (sorted_4 == []):
+    print "no changes found"
+
+'''
 # in case the dictionaries are all unique or you don't care about duplicities,
 # sets should be faster than sorting
 set_1 = set(repr(x) for x in contentTarget)
@@ -115,3 +153,4 @@ print "Prints true if filesystem doesnt have changes and youre safe\n" \
       "Result: "
 print(set_1 == set_2)
 
+'''
