@@ -95,13 +95,13 @@ sample_json2=[{"filePath": '/Users/arnoldas/Desktop/Fall 2016/hackRPI/sourcefold
 sorted_1 = sorted([x for x in contentSource])
 sorted_2 = sorted([x for x in contentTarget])
 
-'''
+
 #UNCOMMENT THIS IF YOU WANT TO TEST THE CHANGE DETECTION ALGORITHM
 sorted_1[0][0]["FullPath"] = "e0w"
 sorted_1[0][1]["PermissionNumber"] = 150
 
 print sorted_1[0][0], sorted_2[0][0], (sorted_1[0][0] == sorted_2[0][0]), "\n\n"
-'''
+
 
 '''
 print "\n\nprinting sorted_1 : from contentsource:\n\n\n"
@@ -131,10 +131,46 @@ sorted_4 = [x for x in sorted_1[0] if x not in sorted_2[0]]
 print sorted_3, "\n"
 print sorted_4, "\n"
 
-# TODO: With the above two arrays, generate a changelog
+# With the above two arrays, generate a changelog
 
 if (sorted_3 == []) and (sorted_4 == []):
-    print "no changes found"
+    print "No changes found."
+    
+else:
+    changelist = []
+    findflag = False
+    
+    for x in sorted_3:
+        for y in sorted_4:
+            if x['FullPath'] == y['FullPath']:
+                findflag = True
+                if x['ContentChanged'] != y ['ContentChanged']:
+                    changelist.append("Content changed: " + x['FullPath'])
+                if x['LastAccessTime'] != y ['LastAccessTime']:
+                    changelist.append("File accessed: " + x['FullPath'] + " @ " + str(y['LastAccessTime']))
+                if x['PermissionNumber'] != y ['PermissionNumber']:
+                    changelist.append("Permissions changed: " + x['FullPath'] + " from " + str(x['PermissionNumber']) + " to " + str(y['PermissionNumber']))
+                break
+        
+        if (not findflag):
+            changelist.append("File deleted or renamed: " + x['FullPath'])
+        findflag = False
+    
+    for x in sorted_4:
+        for y in sorted_3:
+            if x['FullPath'] == y['FullPath']:
+                findflag = True
+                break
+        
+        if (not findflag):
+            changelist.append("File added or renamed: " + x['FullPath'])
+        findflag = False
+    
+    for s in changelist:
+        print s
+                
+
+                    
 
 '''
 # in case the dictionaries are all unique or you don't care about duplicities,
