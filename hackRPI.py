@@ -25,4 +25,11 @@ print(sorted_1 == sorted_2)
 # sets should be faster than sorting
 set_1 = set(repr(x) for x in sample_json1)
 set_2 = set(repr(x) for x in sample_json2)
+if set_1 == set_2:
+    print "everything is safe and no changes found"
+
+else:
+    return chanages
+
 print(set_1 == set_2)
+
